@@ -88,7 +88,7 @@ class StudentInfoManager:
                 print("student not found")
             
             end_time = time.time()
-            print(f"search time: {end_time - start_time:.4f} seconds")
+            print(f"search time: {end_time - start_time:} seconds")
             
         except FileNotFoundError:
             print("file not found")
@@ -196,7 +196,48 @@ class StudentInfoManager:
         except FileNotFoundError:
             print("Error: file not found")
        
-        
+    # get by RRN---------------------------------------
+    def get_by_rrn(self, filename, rrn):
+        """get student by relative record number (RRN)"""
+        try:
+            with open(filename, 'r') as f:
+                # skip header
+                for line in f:
+                    if line.strip() == "===DATA===":
+                        break
+                
+                # read data lines
+                data_lines = f.readlines()
+                
+                if 0 <= rrn < len(data_lines):
+                    print(f"student at RRN {rrn}: {data_lines[rrn].strip()}")
+                else:
+                    print("RRN out of range")       
+        except FileNotFoundError:
+            print("file not found")
+    # show all RRN---------------------------------------
+    def show_all_rrn(self, filename):
+        """show all students with their RRN"""
+        try:
+            with open(filename, 'r') as f:
+                # skip header
+                for line in f:
+                    if line.strip() == "===DATA===":
+                        break
+                
+                # read data lines
+                data_lines = f.readlines()
+                
+                print("RRN\tStudent Info")
+                print("-" * 30)
+                for index, line in enumerate(data_lines):
+                    print(f"{index}\t{line.strip()}")       
+                    
+        except FileNotFoundError:
+            print("file not found") 
+            
+    # main menu---------------------------------------
+    
     def show_menu(self):
         """display main menu"""
         print("\n" + "=" * 40)
@@ -209,7 +250,9 @@ class StudentInfoManager:
         print("5. add student")
         print("6. delete student")
         print("7. update student")  
-        print("8. exit")
+        print("8. get student by RRN")
+        print("9. show all students with RRN")
+        print("10. exit")
         print("=" * 40)
     
     def choose_file(self):
@@ -259,6 +302,13 @@ class StudentInfoManager:
                 new_data = {"NAME": name, "AGE": age, "ID": new_id, "MAJOR": major}
                 self.update_student(filename, student_id, new_data)
             elif choice == "8":
+                filename = self.choose_file()
+                rrn = int(input("enter student number (RRN) to get: ").strip())
+                self.get_by_rrn(filename, rrn)
+            elif choice == "9":
+                filename = self.choose_file()
+                self.show_all_rrn(filename) 
+            elif choice == "10":
                 print("goodbye")
                 break
             else:
