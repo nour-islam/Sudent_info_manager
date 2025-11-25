@@ -2,7 +2,6 @@ FILE_TYPE=STUDENT
 STRUCTURE=FIXED
 FIELDS=NAME,AGE,ID,MAJOR
 ===DATA===
-Nour      21 1001  CS      
 Marwan    21 1002  CS      
 Menna     21 1003  CS      
 Nourhan   21 1004  CS      

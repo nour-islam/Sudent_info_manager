@@ -114,13 +114,12 @@ class StudentInfoManager:
     # delete student---------------------------------------
             
     def delete_student(self, filename, student_name):
-        """delete a student by name"""
         try:
             header_lines = []
             data_lines = []
             found = False
             inside_data = False
-            
+        
             with open(filename, 'r') as f:
                 for line in f:
                     if line.strip() == "===DATA===":
@@ -131,11 +130,16 @@ class StudentInfoManager:
                     if not inside_data:
                         header_lines.append(line)
                     else:
-                        if student_name.lower() in line.lower():
+                        if "fixed" in filename.lower():
+                            current_name = line[:10].strip()  
+                        else:
+                            current_name = line.split('|')[0].strip()  
+                        
+                        if current_name.lower() == student_name.lower():
                             found = True
-                            continue   # skip (delete)
+                            continue   
                         data_lines.append(line)
-    
+        
             if found:
                 # rewrite file
                 with open(filename, 'w') as f:
@@ -143,14 +147,12 @@ class StudentInfoManager:
                         f.write(h)
                     for d in data_lines:
                         f.write(d)
-    
-                print(f"student {student_name} deleted successfully")
+                print(f"Student {student_name} deleted successfully")
             else:
-                print("student not found")
+                print("Student not found")
+                
         except FileNotFoundError:
-            print("file not found")
-        
-        
+            print("File not found")
         
     # update student-------------------------------
     
@@ -302,11 +304,11 @@ class StudentInfoManager:
                 new_data = {"NAME": name, "AGE": age, "ID": new_id, "MAJOR": major}
                 self.update_student(filename, student_id, new_data)
             elif choice == "8":
-                filename = self.choose_file()
+                filename ="students_fixed.txt"
                 rrn = int(input("enter student number (RRN) to get: ").strip())
                 self.get_by_rrn(filename, rrn)
             elif choice == "9":
-                filename = self.choose_file()
+                filename ="students_fixed.txt"
                 self.show_all_rrn(filename) 
             elif choice == "10":
                 print("goodbye")
